@@ -1,0 +1,24 @@
+{
+  "name": "english-slack",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "generate": "drizzle-kit generate",
+    "migrate-create": "wrangler d1 migrations create english-slack",
+    "migrate-apply-local": "wrangler d1 migrations apply english-slack",
+    "migrate-apply-remote": "wrangler d1 migrations apply english-slack --remote",
+    "seeds": "bash scripts/seed.sh",
+    "seed": "wrangler d1 execute english-slack --remote"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "drizzle-orm": "^0.41.0",
+    "hono": "^4.7.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250214.0",
+    "@types/node": "^22.14.1",
+    "dotenv": "^16.5.0",
+    "wrangler": "^4.10.0"
+  }
+}
