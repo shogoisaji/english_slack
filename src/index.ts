@@ -1,8 +1,15 @@
 import { Hono } from "hono";
-import { Bindings } from "./types"; // types.tsからインポート
-import { handleScheduled } from "./scheduled"; // scheduled.tsからインポート
+import { Bindings } from "./types";
+import { handleScheduled } from "./scheduled";
+// ルートファイルをインポート
+import root from "./routes/root";
+import wordList from "./routes/wordList";
 
 const app = new Hono<{ Bindings: Bindings }>();
+
+// --- ルートのマウント ---
+app.route("/", root); // '/' パスに root ルーターをマウント
+app.route("/word-list", wordList); // '/word-list' パスに wordList ルーターをマウント
 
 // --- Cloudflare Worker エントリーポイント ---
 export default {
@@ -20,12 +27,6 @@ export default {
         controller.scheduledTime
       )}`
     );
-    // src/scheduled.ts の handleScheduled を呼び出す
     ctx.waitUntil(handleScheduled(env));
   },
 };
-
-// --- ルートパス (動作確認用) ---
-app.get("/", (c) => {
-  return c.text("Hello Hono! English Slack Worker is running.");
-});
