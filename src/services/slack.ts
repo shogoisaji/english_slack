@@ -7,7 +7,7 @@ export async function postToSlack(
   isDbSuccess?: boolean
 ): Promise<boolean> {
   const dbState = isDbSuccess == null ? "" : isDbSuccess ? "🌐 ⭕️" : "🌐 ❌";
-  const message = `🔔---🔔---🔔---🔔---🔔  ${dbState}\n\n🇺🇸 : ${wordData.word}\n🇯🇵 : ${wordData.translate}\n\n🇺🇸 : ${wordData.example}\n🇯🇵 : ${wordData.exampleTranslate}`;
+  const message = `🇺🇸 : ${wordData.word}\n🇯🇵 : ${wordData.translate}\n\n🇺🇸 : ${wordData.example}\n🇯🇵 : ${wordData.exampleTranslate}\n\n---------------  ${dbState}`;
 
   try {
     const response = await fetch("https://slack.com/api/chat.postMessage", {
