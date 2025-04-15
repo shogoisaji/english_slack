@@ -22,11 +22,7 @@ export default {
     env: Bindings,
     ctx: ExecutionContext
   ): Promise<void> {
-    console.log(
-      `Scheduled event triggered: ${controller.cron} at ${new Date(
-        controller.scheduledTime
-      )}`
-    );
+    console.log(`Scheduled event triggered: ${controller.cron}`);
     ctx.waitUntil(handleScheduled(env));
   },
 };

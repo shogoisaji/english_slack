@@ -1,6 +1,5 @@
-import { SlackApiResponse, GeneratedWordData } from "../types"; // types.tsからインポート
+import { SlackApiResponse, GeneratedWordData } from "../types";
 
-// --- Slack投稿関数 (fetchを使用) ---
 export async function postToSlack(
   botToken: string,
   channelId: string,
@@ -23,17 +22,36 @@ export async function postToSlack(
       }),
     });
 
-    const responseData = (await response.json()) as SlackApiResponse;
+    // レスポンスボディをテキストとして取得（JSONパースエラー対策）
+    const responseBodyText = await response.text();
+    // ★ レスポンスの生ログを追加 (デバッグ用にステータスとボディを出力)
+    console.log(
+      `Slack API Response Status: ${response.status}, Body: ${responseBodyText}`
+    );
 
+    // テキストからJSONをパース
+    const responseData = JSON.parse(responseBodyText) as SlackApiResponse;
+
+    // 型ガードを使って ok プロパティで成功/失敗を判断
     if (!responseData.ok) {
-      console.error("Error posting to Slack:", responseData.error);
+      // ★ エラーログを詳細化 (エラー内容とレスポンスボディ全体を出力)
+      console.error(
+        `Error posting to Slack: ok=${responseData.ok}, error=${responseData.error}, responseBody=${responseBodyText}`
+      );
       return false; // 失敗を示すためにfalseを返す
     }
 
+    // 成功した場合 (responseData は SlackSuccessResponse 型)
     console.log("Successfully posted to Slack:", responseData);
     return true; // 成功を示すためにtrueを返す
   } catch (error) {
-    console.error("Failed to post message to Slack:", error);
+    // fetch自体やJSONパースのエラー
+    // ★ 例外エラーログを区別
+    console.error("Failed to post message to Slack (exception):", error);
+    if (error instanceof Error) {
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
     return false; // 失敗を示すためにfalseを返す
   }
 }

@@ -4,44 +4,29 @@ import {
   HarmBlockThreshold,
   GenerationConfig,
   SafetySetting,
-  SchemaType,
-  ObjectSchema,
 } from "@google/generative-ai";
-import { GeneratedWordData } from "../types"; // types.tsからインポート
+import { GeneratedWordData } from "../types";
 
 // --- Gemini API 呼び出し関数 ---
 export async function generateWordData(
-  apiKey: string
+  apiKey: string,
+  excludeWords: string[] = []
 ): Promise<GeneratedWordData | null> {
   console.log("Generating word data using Gemini...");
+  if (excludeWords.length > 0) {
+    console.log(
+      `Excluding ${excludeWords.length} words:`,
+      excludeWords.join(", ")
+    );
+  }
   try {
-    const genAI = new GoogleGenerativeAI(apiKey); // APIキーを引数で受け取る
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-pro-exp-03-25",
+      model: "gemini-2.5-pro-exp-0325",
     });
-
-    const schema: ObjectSchema = {
-      type: SchemaType.OBJECT,
-      properties: {
-        word: {
-          type: SchemaType.STRING,
-        },
-        translate: {
-          type: SchemaType.STRING,
-        },
-        example: {
-          type: SchemaType.STRING,
-        },
-        exampleTranslate: {
-          type: SchemaType.STRING,
-        },
-      },
-      required: ["word", "translate", "example", "exampleTranslate"],
-    };
 
     const generationConfig: GenerationConfig = {
       responseMimeType: "application/json",
-      responseSchema: schema,
     };
 
     const safetySettings: SafetySetting[] = [
@@ -63,27 +48,23 @@ export async function generateWordData(
       },
     ];
 
-    const parts = [
-      {
-        text: `IT分野で一般的に使用される英単語をランダムに1つ選択してください。選択した単語、その日本語訳、その単語を使った例文（英語）、そしてその例文の日本語訳を提供してください。
-出力は、以下のJSON形式に厳密に従ってください。
-
+    // ★ プロンプトを除外リストに応じて変更
+    let promptText = `Generate an English word and its Japanese translation, along with an example sentence and its translation. Provide the output strictly in the following JSON format:
 {
-  "word": "string", // 選択された英単語
-  "translate": "string", // 単語の日本語訳
-  "example": "string", // 単語を使った英語の例文
-  "exampleTranslate": "string" // 例文の日本語訳
+  "word": "string",
+  "translate": "string",
+  "example": "string",
+  "exampleTranslate": "string"
 }
+Choose a word that is practical for everyday conversation or business situations. Ensure the example sentence clearly demonstrates the usage of the word.`;
 
-例：
-{
-  "word": "algorithm",
-  "translate": "アルゴリズム",
-  "example": "Searching through large datasets requires an efficient algorithm.",
-  "exampleTranslate": "大規模なデータセットを検索するには、効率的なアルゴリズムが必要です。"
-}`,
-      },
-    ];
+    if (excludeWords.length > 0) {
+      promptText += `\n\nIMPORTANT: Do NOT generate any of the following words: ${excludeWords.join(
+        ", "
+      )}.`;
+    }
+
+    const parts = [{ text: promptText }];
 
     const result = await model.generateContent({
       contents: [{ role: "user", parts }],
