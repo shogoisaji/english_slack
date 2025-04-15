@@ -22,7 +22,7 @@ export async function generateWordData(
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-pro-exp-0325",
+      model: "gemini-2.5-pro-exp-03-25",
     });
 
     const generationConfig: GenerationConfig = {
@@ -48,7 +48,6 @@ export async function generateWordData(
       },
     ];
 
-    // ★ プロンプトを除外リストに応じて変更
     let promptText = `Generate an English word and its Japanese translation, along with an example sentence and its translation. Provide the output strictly in the following JSON format:
 {
   "word": "string",

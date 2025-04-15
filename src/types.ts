@@ -13,17 +13,14 @@ export interface SlackSuccessResponse {
   ok: true;
   channel: string;
   ts: string;
-  message: object; // 必要であればより詳細な型定義
-  // 他にもフィールドがある可能性
+  message: object;
 }
 
 export interface SlackErrorResponse {
   ok: false;
   error: string;
-  // 他にもフィールドがある可能性
 }
 
 export type SlackApiResponse = SlackSuccessResponse | SlackErrorResponse;
 
-// Gemini APIから期待するデータ型 (InsertWordからcreatedAtを除外)
-export type GeneratedWordData = Omit<InsertWord, "createdAt">;
+export type GeneratedWordData = InsertWord;
