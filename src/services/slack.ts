@@ -8,7 +8,8 @@ export async function postToSlack(
 ): Promise<boolean> {
   const dbState =
     isDbSuccess == null ? "" : isDbSuccess ? "" : "Database save error";
-  const message = `🇺🇸 : ${wordData.word}\n🇯🇵 : ${wordData.translate}\n\n🇺🇸 : ${wordData.example}\n🇯🇵 : ${wordData.exampleTranslate}\n---------------------------  ${dbState}`;
+
+  const message = `🇺🇸 : ${wordData.word}\n🇯🇵 : ${wordData.translate}\n\n🇺🇸 : ${wordData.example}\n🇯🇵 : ${wordData.exampleTranslate}\n------------------------------------  ${dbState}`;
 
   try {
     const response = await fetch("https://slack.com/api/chat.postMessage", {
@@ -34,7 +35,6 @@ export async function postToSlack(
       return false;
     }
 
-    console.log("Successfully posted to Slack:", responseData);
     return true;
   } catch (error) {
     console.error("Failed to post message to Slack (exception):", error);

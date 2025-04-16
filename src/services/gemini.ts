@@ -55,7 +55,15 @@ export async function generateWordData(
   "example": "string",
   "exampleTranslate": "string"
 }
-Choose a word that is practical for everyday conversation or business situations. Ensure the example sentence clearly demonstrates the usage of the word.`;
+Choose a word that is practical for everyday conversation or business situations. Ensure the example sentence clearly demonstrates the usage of the word.
+example:
+{
+  "word": "negotiate",
+  "translate": "交渉する",
+  "example": "We need to negotiate the terms of the contract before signing.",
+  "exampleTranslate": "署名する前に、契約条件を交渉する必要があります。"
+}
+`;
 
     if (excludeWords.length > 0) {
       promptText += `\n\nIMPORTANT: Do NOT generate any of the following words: ${excludeWords.join(
@@ -73,7 +81,6 @@ Choose a word that is practical for everyday conversation or business situations
 
     const response = result.response;
     const jsonText = response.text();
-    console.log("Gemini raw response:", jsonText);
 
     const wordData = JSON.parse(jsonText) as GeneratedWordData;
 
@@ -88,7 +95,6 @@ Choose a word that is practical for everyday conversation or business situations
       return null;
     }
 
-    console.log("Parsed word data:", wordData);
     return wordData;
   } catch (error) {
     console.error("Error calling Gemini API:", error);

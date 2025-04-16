@@ -13,6 +13,7 @@ app.use("*", corsMiddleware);
 app.route("/", root);
 app.route("/word-list", wordList);
 
+// --- cron triggers ---
 export default {
   fetch: app.fetch,
 

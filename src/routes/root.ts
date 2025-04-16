@@ -1,10 +1,9 @@
 import { Hono } from "hono";
-import { Bindings } from "../types"; // types.tsからインポート
+const root = new Hono();
 
-const root = new Hono<{ Bindings: Bindings }>();
-
+// sample
 root.get("/", (c) => {
-  return c.text("Hello Hono! English Slack Worker is running.");
+  return c.text("Hello Hono!");
 });
 
 export default root;
