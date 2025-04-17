@@ -4,6 +4,8 @@ import {
   HarmBlockThreshold,
   GenerationConfig,
   SafetySetting,
+  SchemaType,
+  ObjectSchema,
 } from "@google/generative-ai";
 import { GeneratedWordData } from "../types";
 
@@ -25,8 +27,20 @@ export async function generateWordData(
       model: "gemini-2.5-pro-exp-03-25",
     });
 
+    const schema: ObjectSchema = {
+      type: SchemaType.OBJECT,
+      properties: {
+        word: { type: SchemaType.STRING },
+        translate: { type: SchemaType.STRING },
+        example: { type: SchemaType.STRING },
+        exampleTranslate: { type: SchemaType.STRING },
+      },
+      required: ["word", "translate", "example", "exampleTranslate"],
+    };
+
     const generationConfig: GenerationConfig = {
       responseMimeType: "application/json",
+      responseSchema: schema,
     };
 
     const safetySettings: SafetySetting[] = [
