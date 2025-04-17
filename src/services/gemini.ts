@@ -100,10 +100,7 @@ example:
 
     if (
       !wordData ||
-      typeof wordData.word !== "string" ||
-      typeof wordData.translate !== "string" ||
-      typeof wordData.example !== "string" ||
-      typeof wordData.exampleTranslate !== "string"
+      Object.values(wordData).some((value) => typeof value !== "string")
     ) {
       console.error("Invalid JSON format received from Gemini:", wordData);
       return null;

@@ -31,7 +31,7 @@ export async function handleScheduled(env: Bindings): Promise<void> {
       env.SLACK_BOT_TOKEN,
       env.SLACK_CHANNEL_ID,
       wordData,
-      d1Success
+      !d1Success
     );
     if (slackSuccess) {
       console.log(`Successfully posted to Slack.`);

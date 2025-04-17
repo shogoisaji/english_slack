@@ -4,10 +4,9 @@ export async function postToSlack(
   botToken: string,
   channelId: string,
   wordData: GeneratedWordData,
-  isDbSuccess?: boolean
+  d1Failure?: boolean
 ): Promise<boolean> {
-  const dbState =
-    isDbSuccess == null ? "" : isDbSuccess ? "" : "Database save error";
+  const dbState = d1Failure ? "Database save error" : "";
 
   const message = `🇺🇸 : ${wordData.word}\n🇯🇵 : ${wordData.translate}\n\n🇺🇸 : ${wordData.example}\n🇯🇵 : ${wordData.exampleTranslate}\n------------------------------------  ${dbState}`;
 
