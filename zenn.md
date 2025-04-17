@@ -183,6 +183,8 @@ export async function postToSlack(
 
 このコードでは、Slack API の`chat.postMessage`エンドポイントを使用して、生成した英単語データを指定したチャンネルに投稿しています。
 
+slack api: https://zenn.dev/kou_pg_0131/articles/slack-api-post-message
+
 ## Cron Trigger による定期実行
 
 Cloudflare Workers の便利な機能の一つが、Cron Trigger です。これを使うことで、定期的にコードを実行することができます：
