@@ -9,7 +9,7 @@ export async function handleScheduled(env: Bindings): Promise<void> {
   const db = drizzle(env.DB, { schema });
 
   try {
-    const recentWords = await getRecentWords(db, 30);
+    const recentWords = await getRecentWords(db, 100);
 
     // 1. Geminiで単語データを生成 (除外リストを渡す)
     const wordData = await generateWordData(env.GEMINI_API_KEY, recentWords);
