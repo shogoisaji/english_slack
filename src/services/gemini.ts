@@ -62,20 +62,20 @@ export async function generateWordData(
       },
     ];
 
-    let promptText = `Generate an English word and its Japanese translation, along with an example sentence and its translation. Provide the output strictly in the following JSON format:
+    let promptText = `Generate a middle-to-high level English word and its Japanese translation, along with an example sentence and its translation. Provide the output strictly in the following JSON format:
 {
   "word": "string",
   "translate": "string",
   "example": "string",
   "exampleTranslate": "string"
 }
-Choose a word that is practical for everyday conversation or business situations. Ensure the example sentence clearly demonstrates the usage of the word.
+Choose a word that is at a intermediate to advanced level (suitable for TOEIC 600-900 or CEFR B1-C1). Avoid very basic words, but ensure the word is practical for business and professional communication.
 example:
 {
-  "word": "negotiate",
-  "translate": "交渉する",
-  "example": "We need to negotiate the terms of the contract before signing.",
-  "exampleTranslate": "署名する前に、契約条件を交渉する必要があります。"
+  "word": "facilitate",
+  "translate": "促進する、容易にする",
+  "example": "The new software is designed to facilitate better communication among team members.",
+  "exampleTranslate": "新しいソフトウェアは、チームメンバー間のより良いコミュニケーションを促進するために設計されています。"
 }
 `;
 
