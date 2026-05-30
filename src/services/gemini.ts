@@ -62,20 +62,20 @@ export async function generateWordData(
       },
     ];
 
-    let promptText = `Generate a middle-to-high level English word and its Japanese translation, along with an example sentence and its translation. Provide the output strictly in the following JSON format:
+    let promptText = `Generate an easy-to-intermediate English word and its Japanese translation, along with an example sentence and its translation. Provide the output strictly in the following JSON format:
 {
   "word": "string",
   "translate": "string",
   "example": "string",
   "exampleTranslate": "string"
 }
-Choose a word that is at a intermediate to advanced level (suitable for TOEIC 600-900 or CEFR B1-C1). Avoid very basic words, but ensure the word is practical for business and professional communication.
+Choose a word that is suitable for TOEIC 400-700 or CEFR A2-B1. Prefer practical words that are useful in everyday conversation, travel, study, or simple workplace communication. Avoid very basic words such as "book", "eat", or "go", and avoid advanced, abstract, or highly specialized vocabulary.
 example:
 {
-  "word": "facilitate",
-  "translate": "促進する、容易にする",
-  "example": "The new software is designed to facilitate better communication among team members.",
-  "exampleTranslate": "新しいソフトウェアは、チームメンバー間のより良いコミュニケーションを促進するために設計されています。"
+  "word": "improve",
+  "translate": "改善する、向上させる",
+  "example": "I want to improve my English speaking skills.",
+  "exampleTranslate": "英語を話す力を向上させたいです。"
 }
 `;
 
