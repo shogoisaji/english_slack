@@ -1,46 +1,46 @@
-import { SlackApiResponse, GeneratedWordData } from "../types";
+import type { Bindings, WordCard } from "../types";
 
-export async function postToSlack(
-  botToken: string,
-  channelId: string,
-  wordData: GeneratedWordData,
-  d1Failure?: boolean
-): Promise<boolean> {
-  const dbState = d1Failure ? "Database save error" : "";
+type SlackApiResponse =
+  | { ok: true }
+  | {
+      ok: false;
+      error?: string;
+    };
 
-  const message = `🇺🇸 : ${wordData.word}\n🇯🇵 : ${wordData.translate}\n\n🇺🇸 : ${wordData.example}\n🇯🇵 : ${wordData.exampleTranslate}\n------------------------------------  ${dbState}`;
+export function formatWordMessage(card: WordCard): string {
+  return [
+    `🇺🇸 : ${card.word}`,
+    `🇯🇵 : ${card.translate}`,
+    "",
+    `🇺🇸 : ${card.example}`,
+    `🇯🇵 : ${card.exampleTranslate}`,
+  ].join("\n");
+}
 
+export async function postWord(env: Bindings, card: WordCard): Promise<void> {
+  const response = await fetch("https://slack.com/api/chat.postMessage", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      Authorization: `Bearer ${env.SLACK_BOT_TOKEN}`,
+    },
+    body: JSON.stringify({
+      channel: env.SLACK_CHANNEL_ID,
+      text: formatWordMessage(card),
+    }),
+  });
+
+  const body = await response.text();
+  let data: SlackApiResponse;
   try {
-    const response = await fetch("https://slack.com/api/chat.postMessage", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        Authorization: `Bearer ${botToken}`,
-      },
-      body: JSON.stringify({
-        channel: channelId,
-        text: message,
-      }),
-    });
+    data = JSON.parse(body) as SlackApiResponse;
+  } catch {
+    throw new Error(
+      `Slack response was not JSON (status ${response.status})`
+    );
+  }
 
-    const responseBodyText = await response.text();
-
-    const responseData = JSON.parse(responseBodyText) as SlackApiResponse;
-
-    if (!responseData.ok) {
-      console.error(
-        `Error posting to Slack: ok=${responseData.ok}, error=${responseData.error}, responseBody=${responseBodyText}`
-      );
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Failed to post message to Slack (exception):", error);
-    if (error instanceof Error) {
-      console.error("Error message:", error.message);
-      console.error("Error stack:", error.stack);
-    }
-    return false;
+  if (!data.ok) {
+    throw new Error(`Slack API error: ${data.error ?? "unknown"}`);
   }
 }

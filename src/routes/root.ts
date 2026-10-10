@@ -1,9 +1,10 @@
 import { Hono } from "hono";
+
 const root = new Hono();
 
-// sample
 root.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.text("english-slack");
 });
 
 export default root;
+
