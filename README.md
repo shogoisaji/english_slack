@@ -27,10 +27,30 @@ npx wrangler secret put SLACK_CHANNEL_ID
 npm run dev
 npm run deploy
 npm run migrate-apply-local
+npm run seed
 npm run migrate-apply-remote
 ```
 
 `deploy` と `migrate-apply-remote` は本番を変更します。
+
+## データベース
+
+マイグレーションは `migrations/*.sql` です。`0001_word_bank.sql` が `last_posted_at` と `word` の一意インデックスを足します。
+
+```bash
+npm run migrate-apply-local
+npm run seed
+```
+
+`npm run seed` は `data/words.json` をローカルの D1 に入れます。同じ `word` がすでにある行はスキップし、`last_posted_at` は変えません。
+
+本番へ同じ投入をするときは、次を明示して実行します。
+
+```bash
+node scripts/seed-words.mjs --remote
+```
+
+本番の `english-slack` には、このマイグレーションと 2000 語がすでに入っています。`migrate-apply-remote` は未適用のファイルだけを実行します。
 
 ## 動き
 
