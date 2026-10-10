@@ -1,0 +1,7 @@
+Headwords were chosen for a TOEIC 400-700 / CEFR A2-B1 daily card, using the New General Service List and the TOEIC Service List as the candidate pool.
+
+Browne, C., Culligan, B., and Phillips, J. New General Service List.
+https://www.newgeneralservicelist.com
+Licensed under CC BY-SA 4.0.
+
+Japanese glosses and example sentences in words.json are original to this project.
