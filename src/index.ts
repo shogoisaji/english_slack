@@ -19,7 +19,13 @@ export default {
     ctx: ExecutionContext
   ): Promise<void> {
     console.log(`Scheduled event triggered: ${controller.cron}`);
-    ctx.waitUntil(handleScheduled(env));
+    ctx.waitUntil(
+      handleScheduled(env).then((done) => {
+        if (done) {
+          controller.noRetry();
+        }
+      })
+    );
   },
 };
 

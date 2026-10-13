@@ -1,5 +1,5 @@
 import { drizzle, DrizzleD1Database } from "drizzle-orm/d1";
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { asc, desc, eq, gte, sql } from "drizzle-orm";
 import * as schema from "../db/schema";
 import type { Word } from "../db/schema";
 
@@ -41,6 +41,19 @@ export async function listRecentWords(
     .from(schema.words)
     .orderBy(desc(schema.words.id))
     .limit(limit);
+}
+
+export async function hasRecentPost(
+  db: Database,
+  withinMs: number
+): Promise<boolean> {
+  const since = new Date(Date.now() - withinMs);
+  const rows = await db
+    .select({ id: schema.words.id })
+    .from(schema.words)
+    .where(gte(schema.words.lastPostedAt, since))
+    .limit(1);
+  return rows.length > 0;
 }
 
 export async function markWordPosted(db: Database, id: number): Promise<void> {
