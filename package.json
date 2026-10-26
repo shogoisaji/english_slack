@@ -3,18 +3,28 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "types": "wrangler types --env-interface CloudflareBindings --include-runtime=false",
     "migrate-create": "wrangler d1 migrations create english-slack",
     "migrate-apply-local": "wrangler d1 migrations apply english-slack",
     "migrate-apply-remote": "wrangler d1 migrations apply english-slack --remote",
     "seed": "node scripts/seed-words.mjs"
   },
   "dependencies": {
-    "drizzle-orm": "^0.41.0",
-    "hono": "^4.7.6"
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.14"
+  },
+  "overrides": {
+    "miniflare": {
+      "undici": "7.30.1"
+    }
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250214.0",
-    "@types/node": "^22.14.1",
-    "wrangler": "^4.10.0"
+    "@cloudflare/workers-types": "^5.20261026.1",
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5",
+    "wrangler": "^4.152.0"
   }
 }
