@@ -23,15 +23,6 @@ export async function takeNextWord(db: Database): Promise<Word | null> {
   return rows[0] ?? null;
 }
 
-export async function takeRandomWord(db: Database): Promise<Word | null> {
-  const rows = await db
-    .select()
-    .from(schema.words)
-    .orderBy(sql`RANDOM()`)
-    .limit(1);
-  return rows[0] ?? null;
-}
-
 export async function listRecentWords(
   db: Database,
   limit = 10

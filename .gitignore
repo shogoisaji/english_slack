@@ -33,5 +33,3 @@ lerna-debug.log*
 .DS_Store
 
 migrations/meta
-
-wrangler.jsonc

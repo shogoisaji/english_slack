@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "english-slack",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-19",
+  "upload_source_maps": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "ratelimits": [
+    {
+      "name": "READ_RATE_LIMITER",
+      "namespace_id": "2026102601",
+      "simple": { "limit": 60, "period": 60 }
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "english-slack",
+      "database_id": "d989181d-93e5-4156-90b1-df5bc7188cf3"
+    }
+  ],
+  "triggers": {
+    // 日本時間 7:00〜22:00 の毎時
+    "crons": ["0 22,23,0-13 * * *"]
+  }
+}

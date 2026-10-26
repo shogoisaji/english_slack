@@ -18,9 +18,24 @@ export default {
     env: Bindings,
     ctx: ExecutionContext
   ): Promise<void> {
-    console.log(`Scheduled event triggered: ${controller.cron}`);
+    const startedAt = Date.now();
+    const runId = crypto.randomUUID();
+    console.log({
+      event: "scheduled_started",
+      runId,
+      cron: controller.cron,
+      scheduledAt: new Date(controller.scheduledTime).toISOString(),
+      startedAt: new Date(startedAt).toISOString(),
+      delayMs: startedAt - controller.scheduledTime,
+    });
     ctx.waitUntil(
-      handleScheduled(env).then((done) => {
+      handleScheduled(env, runId).then((done) => {
+        console.log({
+          event: "scheduled_finished",
+          runId,
+          outcome: done ? "completed" : "failed",
+          durationMs: Date.now() - startedAt,
+        });
         if (done) {
           controller.noRetry();
         }

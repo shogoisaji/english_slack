@@ -20,6 +20,7 @@ export function formatWordMessage(card: WordCard): string {
 export async function postWord(env: Bindings, card: WordCard): Promise<void> {
   const response = await fetch("https://slack.com/api/chat.postMessage", {
     method: "POST",
+    signal: AbortSignal.timeout(10_000),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       Authorization: `Bearer ${env.SLACK_BOT_TOKEN}`,
@@ -29,6 +30,11 @@ export async function postWord(env: Bindings, card: WordCard): Promise<void> {
       text: formatWordMessage(card),
     }),
   });
+
+  if (!response.ok) {
+    await response.body?.cancel();
+    throw new Error(`Slack HTTP error: ${response.status}`);
+  }
 
   const body = await response.text();
   let data: SlackApiResponse;
